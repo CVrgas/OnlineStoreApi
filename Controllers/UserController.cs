@@ -1,9 +1,11 @@
-﻿using System.Security.Cryptography;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using OnlineStoreApi.DTo;
 using OnlineStoreApi.Models;
 using OnlineStoreApi.services;
+
 
 namespace OnlineStoreApi.Controllers
 {
@@ -11,12 +13,14 @@ namespace OnlineStoreApi.Controllers
     [ApiController]
     public class UserController : Controller
     {
-        public UserController(IUserRepository repository)
+        public UserController(IUserRepository repository, JwtService jwtService)
         {
             Repository = repository;
+            JwtService = jwtService;
         }
 
         public IUserRepository Repository { get; }
+        public JwtService JwtService { get; }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
@@ -88,6 +92,17 @@ namespace OnlineStoreApi.Controllers
             }
             return NotFound();
             
+        }
+
+        [HttpPost("authenticate")]
+        public async Task<ActionResult> Authenticate(UserLogInDTo request)
+        {
+            if(!await Repository.Authenticate(request))
+            {
+                return NotFound(request);
+            }
+            var token = JwtService.GenerateToken(request.email);
+            return Ok(token);
         }
     }
 }

@@ -10,6 +10,8 @@ namespace OnlineStoreApi.services
         public void CreateUser(User user);
         public User UpdateUser(User oldUser, UserDTo updated);
         Task<User> DeleteUser(int id);
+
+        public Task<bool> Authenticate(UserLogInDTo request);
         public Task<bool> UserExist(int id);
         public Task<bool> EmailExist(string email);
         public Task<bool> SaveChangesAsync();

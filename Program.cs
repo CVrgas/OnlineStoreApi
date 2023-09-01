@@ -1,4 +1,6 @@
+using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using OnlineStoreApi.services;
 
 namespace OnlineStoreApi
@@ -11,6 +13,16 @@ namespace OnlineStoreApi
 
             // Add services to the container.
             builder.Services.AddSingleton<tempDb>();
+            builder.Services.AddSingleton<JwtService>(provider =>
+            {
+                // You can read configuration values from your app settings here
+                var secretKey = builder.Configuration["Jwt:SecretKey"];
+                var issuer = builder.Configuration["Jwt:Issuer"];
+                var audience = builder.Configuration["Jwt:Audience"];
+
+                return new JwtService(secretKey, issuer, audience);
+            });
+
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
             builder.Services.AddControllers();

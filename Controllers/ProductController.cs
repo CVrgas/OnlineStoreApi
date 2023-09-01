@@ -9,7 +9,7 @@ namespace OnlineStoreApi.Controllers
     [ApiController]
     public class ProductController : Controller
     {
-        public ProductController(IProductsRepository repository)
+        public ProductController(IProductsRepository repository , JwtService jwtService)
         {
             Repository = repository;
         }

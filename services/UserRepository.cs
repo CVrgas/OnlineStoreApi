@@ -57,6 +57,24 @@ namespace OnlineStoreApi.services
 
         }
 
+        public async Task<bool> Authenticate(UserLogInDTo request)
+        {
+            User user = await GetUserByEmail(request.email);
+
+            if(user == null)
+            {
+                return false;
+            }
+
+            var hash = HashPassword(request.password, user.Salt);
+
+            if(hash != user.Password)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public string HashPassword(string password, byte[] salt)
         {
             using var sha256 = SHA256.Create();
@@ -78,6 +96,10 @@ namespace OnlineStoreApi.services
         public async Task<bool> EmailExist(string email)
         {
             return await Context.Users.AnyAsync(x => x.Email == email);
+        }
+        public async Task<User> GetUserByEmail(string email)
+        {
+            return await Context.Users.Where(u => u.Email == email).FirstOrDefaultAsync();
         }
 
     }
