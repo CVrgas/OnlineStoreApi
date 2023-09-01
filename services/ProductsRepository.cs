@@ -1,42 +1,65 @@
-﻿using OnlineStoreApi.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using OnlineStoreApi.DTo;
+using OnlineStoreApi.Models;
 
 namespace OnlineStoreApi.services
 {
     public class ProductsRepository : IProductsRepository
     {
-        public Product CreateProduct(Product product)
+        public ProductsRepository(DataContext context)
         {
-            throw new NotImplementedException();
+            Context = context;
         }
 
-        public void DeleteProduct(int productId)
+        public DataContext Context { get; }
+        public async Task<IEnumerable<Product>> GetProducts()
+
         {
-            throw new NotImplementedException();
+            return await Context.Products.ToListAsync();
+        }
+        public async Task<Product?> GetProduct(int id)
+        {
+            return await Context.Products.Where(u => u.Id == id).FirstOrDefaultAsync();
+
         }
 
-        public IEnumerable<Product> GetAllProducts()
+        public void CreateProduct(Product product)
         {
-            throw new NotImplementedException();
+            if (product == null)
+            {
+                return;
+            }
+            Context.Products.Add(product);
         }
 
-        public Product GetProduct(int productId)
+        public async Task<Product> DeleteProduct(int id)
         {
-            throw new NotImplementedException();
+            var result = await Context.Products.Where(_ => _.Id == id).FirstOrDefaultAsync();
+            if (result != null)
+            {
+                Context.Remove(result);
+                return result;
+            }
+            return null;
+        }
+        public Product UpdateProduct(Product product, ProductDTo updated)
+        {
+            product.Name = updated.Name;
+            product.Description = updated.Description;
+            product.Price = updated.Price;
+            product.Stock = updated.Stock;
+            return product;
         }
 
-        public IEnumerable<Product> GetProductsByOption(string opt)
+        public async Task<bool> ProductExist(int id)
         {
-            throw new NotImplementedException();
+            return await Context.Products.AnyAsync(p => p.Id == id);
         }
 
-        public bool ProductExist()
+        public async Task<bool> SaveChangesAsync()
         {
-            throw new NotImplementedException();
+            return (await Context.SaveChangesAsync() >= 0);
         }
 
-        public Product UpdateProduct(Product product)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

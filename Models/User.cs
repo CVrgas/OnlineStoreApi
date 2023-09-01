@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.Security.Cryptography;
 
 namespace OnlineStoreApi.Models
 {
@@ -17,7 +16,7 @@ namespace OnlineStoreApi.Models
 
         [Required]
         public string Password { get; set; }
-        public byte[] Salt { get; } = RandomNumberGenerator.GetBytes(128 / 8);
+        public byte[] Salt { get; set; }
         public ICollection<Product>? Cart { get; set; }
     }
 }

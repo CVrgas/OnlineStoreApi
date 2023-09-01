@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineStoreApi.Models;
 
-namespace OnlineStoreApi.Data
+namespace OnlineStoreApi
 {
     public class DataContext : DbContext
     {

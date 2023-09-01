@@ -1,17 +1,17 @@
-﻿using OnlineStoreApi.Models;
+﻿using OnlineStoreApi.DTo;
+using OnlineStoreApi.Models;
 
 namespace OnlineStoreApi.services
 {
     public interface IProductsRepository
     {
-        public IEnumerable<Product> GetAllProducts();
-        public IEnumerable<Product> GetProductsByOption(string opt);
-        public Product GetProduct(int productId);
-        public Product CreateProduct(Product product);
-        public Product UpdateProduct(Product product);
-        public void DeleteProduct(int productId);
-        public bool ProductExist();
+        Task<IEnumerable<Product>> GetProducts();
+        public Task<Product?> GetProduct(int id);
+        public void CreateProduct(Product product);
+        public Product UpdateProduct(Product product, ProductDTo updated);
+        Task<Product> DeleteProduct(int id);
+        public Task<bool> ProductExist(int id);
+        public Task<bool> SaveChangesAsync();
 
-         
     }
 }
