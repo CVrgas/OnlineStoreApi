@@ -102,7 +102,7 @@ namespace OnlineStoreApi.Controllers
                 return NotFound(request);
             }
             var token = JwtService.GenerateToken(request.email);
-            return Ok(token);
+            return Ok(new {token});
         }
     }
 }

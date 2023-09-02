@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineStoreApi.DTo;
 using OnlineStoreApi.Models;
 using OnlineStoreApi.services;
 
 namespace OnlineStoreApi.Controllers
 {
+    [Authorize]
     [Route("OnlineStore/api/product")]
     [ApiController]
     public class ProductController : Controller
@@ -16,6 +18,7 @@ namespace OnlineStoreApi.Controllers
 
         public IProductsRepository Repository { get; }
 
+        
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetAllProduct()
         {

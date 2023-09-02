@@ -41,6 +41,35 @@ namespace OnlineStoreApi
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+        public ClaimsPrincipal ValidateToken(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var validationParameters = GetValidationParameters();
 
+            try
+            {
+                SecurityToken validatedToken;
+                var principal = tokenHandler.ValidateToken(token, validationParameters, out validatedToken);
+                return principal;
+            }
+            catch (Exception)
+            {
+                // Token validation failed
+                return null;
+            }
+        }
+        private TokenValidationParameters GetValidationParameters()
+        {
+            return new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = _issuer,
+                ValidAudience = _audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey))
+            };
+        }
     }
 }
