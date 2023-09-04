@@ -6,7 +6,6 @@ using OnlineStoreApi.DTo;
 using OnlineStoreApi.Models;
 using OnlineStoreApi.services;
 
-
 namespace OnlineStoreApi.Controllers
 {
     [Route("OnlineStore/api/user")]
@@ -45,7 +44,7 @@ namespace OnlineStoreApi.Controllers
         {
             if(await Repository.EmailExist(user.Email))
             {
-                return BadRequest();
+                return BadRequest("email already exist");
             }
             User newUser = new User()
             {

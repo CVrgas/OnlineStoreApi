@@ -16,7 +16,9 @@ namespace OnlineStoreApi.Models
 
         [Required]
         public string Password { get; set; }
+
         public byte[] Salt { get; set; }
-        public ICollection<Product>? Cart { get; set; }
+
+        public ICollection<Product>? Cart { get; set; } = new List<Product>();
     }
 }

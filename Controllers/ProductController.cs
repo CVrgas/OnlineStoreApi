@@ -48,6 +48,8 @@ namespace OnlineStoreApi.Controllers
             {
                 Name = product.Name,
                 Description = product.Description,
+                Thumbnail = product.Thumbnail,
+                ImagesUrl = product.ImagesUrl,
                 Price = product.Price,
                 Stock = product.Stock,
             };

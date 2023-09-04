@@ -9,9 +9,19 @@ namespace OnlineStoreApi.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string? Name { get; set; }
-        public string? Description { get; set; }
-        public int Price { get; set; }
+
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+
+        [NotMapped]
+        public List<string> ImagesUrl { get; set; } = new List<string>();
+
+        public string Thumbnail { get; set; }
+
+        public decimal Price { get; set; }
+
         public int Stock { get; set; }
     }
+
 }
