@@ -14,7 +14,6 @@ namespace OnlineStoreApi
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddSingleton<tempDb>();
             builder.Services.AddSingleton<JwtService>(provider =>
             {
                 // You can read configuration values from your app settings here
@@ -52,6 +51,14 @@ namespace OnlineStoreApi
                 });
 
             var app = builder.Build();
+
+            // seed database si esta se encuentra vacia
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var dbContext = services.GetRequiredService<DataContext>();
+                DataSeeder.SeedData(dbContext);
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

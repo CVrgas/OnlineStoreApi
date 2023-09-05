@@ -2,6 +2,7 @@
 
 namespace OnlineStoreApi.DTo
 {
+    // clase utilizada para recivir user
     public class UserDTo
     {
         [Required]

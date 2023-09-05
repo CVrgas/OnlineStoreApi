@@ -4,10 +4,13 @@ using OnlineStoreApi.Models;
 
 namespace OnlineStoreApi.DTo
 {
+    // clase utilizada para recivir product
     public class ProductDTo
     {
         [Required]
         public string Name { get; set; }
+        [Required]
+        public string Brand { get; set; }
 
         [Required]
         public string Description { get; set; }

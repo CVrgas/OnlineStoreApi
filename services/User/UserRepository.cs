@@ -6,8 +6,11 @@ using OnlineStoreApi.Models;
 
 namespace OnlineStoreApi.services
 {
+    //  Classe para el manejo de la interaccion con la base de dato
+    //  implementa IUserRepository
     public class UserRepository : IUserRepository
     {
+        // constructor que declara el context de la base de dato
         public UserRepository(DataContext context)
         {
             Context = context;
@@ -15,15 +18,19 @@ namespace OnlineStoreApi.services
 
         public DataContext Context { get; }
 
+        //funcion que retorna todos los usarios
         public async Task<IEnumerable<User>> GetUsers()
         {
             return await Context.Users.ToListAsync();
         }
+
+        // funcion que retorna un usuario el la userId  coincida con la id proveeida
         public async Task<User?> GetUser(int id)
         {
             return await Context.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
         }
 
+        // create un usario
         public void CreateUser(User user)
         {
             //User newUser = new User()
@@ -37,6 +44,7 @@ namespace OnlineStoreApi.services
             Context.Users.Add(user);
         }
 
+        // Elimina un Usario
         public async Task<User> DeleteUser(int id)
         {
             var result = await Context.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
@@ -48,6 +56,7 @@ namespace OnlineStoreApi.services
             return null;
         }
 
+        // actualiza un usuario
         public User UpdateUser(User oldUser, UserDTo updated)
         {
             oldUser.Name = updated.Name;
@@ -57,6 +66,7 @@ namespace OnlineStoreApi.services
 
         }
 
+        // Authentifiza a el usario
         public async Task<bool> Authenticate(UserLogInDTo request)
         {
             User user = await GetUserByEmail(request.email);
@@ -75,6 +85,7 @@ namespace OnlineStoreApi.services
             return true;
         }
 
+        // covierte password a hash
         public string HashPassword(string password, byte[] salt)
         {
             using var sha256 = SHA256.Create();
@@ -85,18 +96,26 @@ namespace OnlineStoreApi.services
             var hash = Convert.ToBase64String(byteHash);
             return hash;
         }
+
+        // chekea si un usuario existe
         public async Task<bool> UserExist(int id)
         {
             return await Context.Users.AnyAsync(u => u.Id == id);
         }
+
+        // guarda los cambios de la base de dato
         public async Task<bool> SaveChangesAsync()
         {
             return (await Context.SaveChangesAsync() >= 0);
         }
+
+        // checkea que el email proveido no exita previamente
         public async Task<bool> EmailExist(string email)
         {
             return await Context.Users.AnyAsync(x => x.Email == email);
         }
+
+        // returna al usuario cuyo email coincida con el proveido
         public async Task<User> GetUserByEmail(string email)
         {
             return await Context.Users.Where(u => u.Email == email).FirstOrDefaultAsync();

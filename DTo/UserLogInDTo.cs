@@ -2,6 +2,7 @@
 
 namespace OnlineStoreApi.DTo
 {
+    // clase utilizada para recivir y authorizar users
     public class UserLogInDTo
     {
         [EmailAddress]
